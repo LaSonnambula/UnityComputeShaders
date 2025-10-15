@@ -14,12 +14,19 @@ public class OrbitingStars : MonoBehaviour
     int groupSizeX;
     
     Transform[] stars;
+    ComputeBuffer resultBuffer;
+    Vector3[] output;
     
     void Start()
     {
         kernelHandle = shader.FindKernel("OrbitingStars");
         shader.GetKernelThreadGroupSizes(kernelHandle, out threadGroupSizeX, out _, out _);
         groupSizeX = (int)((starCount + threadGroupSizeX - 1) / threadGroupSizeX);
+
+        resultBuffer = new ComputeBuffer(starCount, sizeof(float) * 3);
+        //bind the buffer to the result of compute shader
+        shader.SetBuffer(kernelHandle, "Result", resultBuffer);
+        output = new Vector3[starCount];
 
         stars = new Transform[starCount];
         for (int i = 0; i < starCount; i++)
@@ -30,6 +37,18 @@ public class OrbitingStars : MonoBehaviour
 
     void Update()
     {
-        
+        shader.SetFloats("time",Time.time);
+        shader.Dispatch(kernelHandle, groupSizeX, 1, 1);
+
+        //read the result buffer and write to output array
+        resultBuffer.GetData(output);
+        for (int i = 0; i < starCount; i++)
+        {
+            stars[i].localPosition = output[i];
+        }
+    }
+    private void OnDestroy()
+    {
+        resultBuffer.Dispose();
     }
 }

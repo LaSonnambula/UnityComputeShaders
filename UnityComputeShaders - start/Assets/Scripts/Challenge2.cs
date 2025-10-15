@@ -14,6 +14,8 @@ public class Challenge2 : MonoBehaviour
 
     public Color fillColor = new Color(1.0f, 1.0f, 0.0f, 1.0f);
     public Color clearColor = new Color( 0, 0, 0.3f, 1.0f );
+    public int sides = 8;
+    public float thickness = 0.01f;
 
     // Use this for initialization
     void Start()
@@ -34,6 +36,9 @@ public class Challenge2 : MonoBehaviour
 
         shader.SetVector("fillColor", fillColor);
         shader.SetVector("clearColor", clearColor);
+        shader.SetInt("sides", sides);
+        shader.SetFloat("thickness", thickness);
+        shader.SetFloat("time", Time.time);
 
         shader.SetInt("texResolution", texResolution);
         shader.SetTexture(kernelHandle, "Result", outputTexture);
@@ -43,7 +48,9 @@ public class Challenge2 : MonoBehaviour
 
     private void DispatchShader(int x, int y)
     {
-    	shader.SetFloat( "time", Time.time );
+        shader.SetInt("sides", sides);
+        shader.SetFloat("thickness", thickness);
+        shader.SetFloat( "time", Time.time);
         shader.Dispatch(kernelHandle, x, y, 1);
     }
 

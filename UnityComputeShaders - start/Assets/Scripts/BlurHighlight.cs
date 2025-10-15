@@ -16,10 +16,13 @@ public class BlurHighlight : BaseCompletePP
     public Transform trackedObject;
 
     Vector4 center;
+    RenderTexture horzOutput = null;
+    int kernelHorzPassID;
 
     protected override void Init()
     {
         center = new Vector4();
+        kernelHorzPassID = shader.FindKernel("HorzPass");
         kernelName = "Highlight";
         base.Init();
 
@@ -28,6 +31,15 @@ public class BlurHighlight : BaseCompletePP
     protected override void CreateTextures()
     {
         base.CreateTextures();
+
+        shader.SetTexture(kernelHorzPassID, "source", renderedSource);
+        
+
+        CreateTexture(ref horzOutput);
+
+        shader.SetTexture(kernelHorzPassID,"horzOutput",horzOutput);
+        //as source in the second pass 
+        shader.SetTexture(kernelHandle, "horzOutput", horzOutput);
     }
 
     private void OnValidate()
@@ -42,8 +54,10 @@ public class BlurHighlight : BaseCompletePP
     {
         float rad = (radius / 100.0f) * texSize.y;
         shader.SetFloat("radius", rad);
+        shader.SetFloat("blurRadius", blurRadius);
         shader.SetFloat("edgeWidth", rad * softenEdge / 100.0f);
         shader.SetFloat("shade", shade);
+        shader.SetVector("center", center);
     }
 
     protected override void DispatchWithSource(ref RenderTexture source, ref RenderTexture destination)
@@ -52,6 +66,7 @@ public class BlurHighlight : BaseCompletePP
 
         Graphics.Blit(source, renderedSource);
 
+        shader.Dispatch(kernelHorzPassID, groupSize.x, groupSize.y, 1);
         shader.Dispatch(kernelHandle, groupSize.x, groupSize.y, 1);
 
         Graphics.Blit(output, destination);
@@ -78,5 +93,4 @@ public class BlurHighlight : BaseCompletePP
             DispatchWithSource(ref source, ref destination);
         }
     }
-
 }
