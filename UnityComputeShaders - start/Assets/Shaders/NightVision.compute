@@ -25,7 +25,29 @@ float inCircle( float2 pt, float2 center, float radius, float edgeWidth ){
 [numthreads(8, 8, 1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
-    float3 finalColor = source[id.xy].rgb;
-           
+    uint2 index = (uint2(id.x,id.y)/3) * 3;
+
+    float noise = random((float2)id.xy,time);
+    float3 srcColor = lerp(source[id.xy].rgb * 2,source[index].rgb,noise);
+
+    float3 grayScale = (srcColor.r + srcColor.g + srcColor.b) /3.0;
+    float3 tinted = grayScale * tintColor.rgb;
+    float3 finalColor = lerp(srcColor,tinted, tintStrength);
+
+    float uvY = (float)id.y/(float)source.Length.y;
+    float scanline = saturate(smoothstep(0.1,0.2,frac(uvY * lines + time *3)) + 0.3);
+    
+    finalColor = lerp(source[id.xy].rgb * 0.5,finalColor,scanline);
+
+    //monocular
+    float uvX = (float)id.x/(float)source.Length.x;
+    float2 center = source.Length / 2.0;
+    center.x -= radius * 0.7;
+    float leftLense = inCircle(id.xy,center,radius,edgeWidth);
+    center.x += radius * 1.4;
+    float rightLense = inCircle(id.xy,center,radius,edgeWidth);
+    float inVision = saturate(leftLense + rightLense);
+
+    finalColor = lerp(float4(0,0,0,1),finalColor,inVision);
     output[id.xy] = float4(finalColor, 1);
 }
