@@ -9,11 +9,26 @@ float edgeWidth;
 float4 tintColor;
 float tintStrength;
 
+float overlay(float base, float blend)
+{
+    return (base < 0.5) ? (2.0 * base * blend) : (1.0 - 2.0 * (1.0 - base) * (1.0 - blend));
+}
+
 [numthreads(8, 8, 1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
     float4 srcColor = source[id.xy];
-    float4 color = srcColor;
+    
+    float4 tinted = 1.0;
+    tinted.r = overlay(srcColor.r, tintColor.r);
+    tinted.g = overlay(srcColor.g, tintColor.g);
+    tinted.b = overlay(srcColor.b, tintColor.b);
+
+    float yArea = 1.0 - smoothstep(tintHeight - edgeWidth/2.0, tintHeight + edgeWidth/2.0, id.y);
+
+    float l = saturate(yArea) * tintStrength;
+
+    float4 color = lerp(srcColor , tinted, l);
 
     output[id.xy] = color;
 

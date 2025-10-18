@@ -94,7 +94,8 @@ public class SimpleFlocking : MonoBehaviour
 
             if (!boidsArray[i].direction.Equals(Vector3.zero))
             {
-                boids[i].transform.rotation = Quaternion.LookRotation(boidsArray[i].direction);
+                boids[i].transform.rotation = 
+                    Quaternion.LookRotation(boidsArray[i].direction);
             }
 
         }
