@@ -40,7 +40,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
                 if(dist < neighbourDistance)
                 {
                     dist = max(dist, 0.0000001);
-                    separation += offset * (1.0 / dist - 1.0 /neighbourDistance);
+                    separation += offset * (1.0 / dist - 1.0 /neighbourDistance );
                
                 }
                 alignment += tempBoid.direction;
