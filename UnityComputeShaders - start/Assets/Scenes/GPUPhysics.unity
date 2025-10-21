@@ -239,7 +239,6 @@ GameObject:
   m_Component:
   - component: {fileID: 411714672}
   - component: {fileID: 411714671}
-  - component: {fileID: 411714673}
   m_Layer: 0
   m_Name: GPUPhysics
   m_TagString: Untagged
@@ -259,7 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d9ee6a883054480a8592cf8144f966a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shader: {fileID: 7200000, guid: 14555b155e3214c838a76f270b7ad694, type: 3}
+  shader: {fileID: 7200000, guid: 1dde7010a586a4bc5b942d791293614b, type: 3}
   cubeMaterial: {fileID: 2100000, guid: 0beffabe7c634451d9527998eab0a5e4, type: 2}
   bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -292,36 +291,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &411714673
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 411714670}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6d98a4b93caf4097baa8c10f451198b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shader: {fileID: 7200000, guid: 14555b155e3214c838a76f270b7ad694, type: 3}
-  cubeMaterial: {fileID: 2100000, guid: 0beffabe7c634451d9527998eab0a5e4, type: 2}
-  bounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 20, y: 20, z: 20}
-  cubeMass: 0
-  scale: 0
-  particlesPerEdge: 0
-  springCoefficient: 0
-  dampingCoefficient: 0
-  tangentialCoefficient: 0
-  gravityCoefficient: 0
-  frictionCoefficient: 0
-  angularFrictionCoefficient: 0
-  angularForceScalar: 0
-  linearForceScalar: 0
-  rigidBodyCount: 1000
-  stepsPerUpdate: 10
 --- !u!1 &1481930526
 GameObject:
   m_ObjectHideFlags: 0
