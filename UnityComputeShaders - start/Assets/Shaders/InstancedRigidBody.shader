@@ -86,7 +86,6 @@
          void vert(inout appdata_full v, out Input data)
         {
             UNITY_INITIALIZE_OUTPUT(Input, data);
-
             #ifdef UNITY_PROCEDURAL_INSTANCING_ENABLED
                 v.vertex = mul(_Matrix, v.vertex);
             #endif
